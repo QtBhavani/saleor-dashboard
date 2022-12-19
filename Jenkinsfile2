@@ -1,0 +1,23 @@
+pipeline {
+    agent {label 'jdk11'}
+    triggers {
+        pollSCM('* * * * *')
+    }
+    stages {
+        stage('vcs') {
+            steps {
+                git branch: 'main', url: 'https://github.com/QtBhavani/saleor-dashboard.git'
+            }
+        }
+        stage('docker image build') {
+            steps {
+                sh 'docker image build -t jvbhavani/saleor-dashboar:DEV .'
+            }
+        }
+        stage('push image to registry') {
+            steps {
+                sh 'docker image push jvbhavani/saleor-dashboar:DEV'
+            }
+        }
+    }
+}
